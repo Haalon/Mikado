@@ -27,8 +27,8 @@ def grid_weight_configure(widg, row_val = 1, col_val = 1):
 
 	Args:
 		widg (tkinter.Widget): widget with a grid layout
-		row_val (int): default value for rows
-		col_val (int): default value for columns
+		row_val (int or list(int)): default values for rows
+		col_val (int or list(int)): default values for columns
 
 	Returns:
 		None	
@@ -37,6 +37,13 @@ def grid_weight_configure(widg, row_val = 1, col_val = 1):
 		return
 
 	for i in range(widg.size()[0]):
-		widg.columnconfigure(i, weight=col_val)
+		if isinstance(col_val, list):
+			widg.columnconfigure(i, weight=col_val[i])
+		else:
+			widg.columnconfigure(i, weight=col_val)
+
 	for i in range(widg.size()[1]):
-		widg.rowconfigure(i, weight=row_val)
+		if isinstance(row_val, list):
+			widg.rowconfigure(i, weight=row_val[i])
+		else:
+			widg.rowconfigure(i, weight=row_val)
