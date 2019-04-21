@@ -1,6 +1,6 @@
 """Small helper functions, mostly for tkinter"""
-
 import tkinter as tk
+
 
 def set_col(widg, col):
 	"""
@@ -8,10 +8,10 @@ def set_col(widg, col):
 
 	Args:
 		widg (tkinter.Widget): widget to start from
-		col (str): color to set, hex or a color name string 
+		col (str): color to set, hex or a color name string
 
 	Returns:
-		None	
+		None
 	"""
 
 	if not isinstance(widg, tk.Widget):
@@ -21,7 +21,8 @@ def set_col(widg, col):
 	for child in widg.winfo_children():
 		set_col(child, col)
 
-def grid_weight_configure(widg, row_val = 1, col_val = 1):
+
+def grid_weight_configure(widg, row_val=1, col_val=1):
 	"""
 	Set default weights to all rows and columns for a grid layout
 
@@ -31,7 +32,7 @@ def grid_weight_configure(widg, row_val = 1, col_val = 1):
 		col_val (int or list(int)): default values for columns
 
 	Returns:
-		None	
+		None
 	"""
 	if not isinstance(widg, tk.Widget):
 		return
