@@ -3,11 +3,11 @@ import utils
 
 
 class App(Frame):
-	def __init__(self, master=None, Title="Mikado2D"):
-		super().__init__(master)
+	def __init__(self):
+		super().__init__()
 		self.master.rowconfigure(0, weight=1)
 		self.master.columnconfigure(0, weight=1)
-		self.master.title(Title)
+		self.master.title("Mikado2D")
 		self.master['padx'] = 10
 		self.master['pady'] = 10
 		self.grid(sticky="NESW")
@@ -16,8 +16,8 @@ class App(Frame):
 		self.mainloop()
 
 	def create(self):
-		self.GameCanvas = GameCanvas(self, bg='gray90')
-		self.GameCanvas.grid(row=0, column=0, rowspan=2, sticky="NESW", pady=3)
+		self.field = GameCanvas(self, bg='gray90')
+		self.field.grid(row=0, column=0, rowspan=2, sticky="NESW", pady=3)
 
 		self.stats = StatFrame(self)
 		self.stats.grid(row=0, column=1, sticky="NESW", pady=3)
@@ -30,6 +30,7 @@ class App(Frame):
 class GameCanvas(Canvas):
 	def __init__(self, *ap, **an):
 		super().__init__(*ap, **an)
+		self['bg'] = 'gray80'
 
 
 class StatFrame(Frame):
