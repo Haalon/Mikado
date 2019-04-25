@@ -1,6 +1,8 @@
 from tkinter import *
 import utils
+from logic import GameField
 
+GAME_SIZE = 800
 
 class App(Frame):
 	def __init__(self):
@@ -27,11 +29,13 @@ class App(Frame):
 		utils.grid_weight_configure(self, col_val=[1, 0])
 
 
-class GameCanvas(Canvas):
+class GameCanvas(Canvas, GameField):
 	def __init__(self, *ap, **an):
-		super().__init__(*ap, **an)
-		self['bg'] = 'gray80'
-
+		an['width'] = GAME_SIZE
+		an['height'] = GAME_SIZE
+		Canvas.__init__(self, *ap, **an)
+		GameField.__init__(self, size = GAME_SIZE)
+		
 
 class StatFrame(Frame):
 	def __init__(self, *ap, **an):
