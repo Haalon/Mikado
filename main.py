@@ -35,7 +35,7 @@ class GameCanvas(Canvas, GameField):
 		an['width'] = GAME_SIZE
 		an['height'] = GAME_SIZE
 		Canvas.__init__(self, *ap, **an)
-		GameField.__init__(self, size=GAME_SIZE)
+		GameField.__init__(self, size=GAME_SIZE, canvas=self)
 
 
 class StatFrame(Frame):
@@ -56,12 +56,15 @@ class ControlFrame(Frame):
 		self['bg'] = 'gray70'
 		self.create()
 
+	def newGame(self):
+		pass
+
 	def create(self):
 		self.Quit = Button(self, text="Quit", highlightthickness=0, command=self.quit)
-		self.Quit.grid(row=0, column=0, sticky="SWE", padx=5, pady=3)
+		self.Quit.grid(row=1, column=0, sticky="SWE", padx=5, pady=3)
 
-		self.NewGame = Button(self, text="New Game", highlightthickness=0, command=self.quit)
-		self.NewGame.grid(row=1, column=0, sticky="SWE", padx=5, pady=3)
+		self.NewGame = Button(self, text="New Game", highlightthickness=0, command=self.newGame)
+		self.NewGame.grid(row=0, column=0, sticky="SWE", padx=5, pady=3)
 		utils.grid_weight_configure(self, row_val=[1, 0], col_val=1)
 
 

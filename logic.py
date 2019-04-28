@@ -1,4 +1,5 @@
 import random as rnd
+import math
 
 
 def _dist2(x1, y1, x2, y2):
@@ -24,8 +25,9 @@ def _stickCollision(st1, st2):
 
 
 class GameField:
-	def __init__(self, size, sticksnum=24, rad_percent=0.02, line_percent=0.2):
+	def __init__(self, size, sticksnum=24, rad_percent=0.02, line_percent=0.2, canvas=None):
 
+		self.__canvas = canvas
 		self.__size = size
 		self.__baserad = rad_percent * size
 		self.__baselen = line_percent * size
@@ -33,7 +35,14 @@ class GameField:
 
 	def shuffleSticks(self, num):
 		for _ in range(num):
-			pass
+			x1, y1 = rnd.randint(self.__baselen, self.__size - self.__baselen), rnd.randint(self.__baselen, self.__size - self.__baselen)
+			P = rnd.random()*math.pi
+
+			x2 = self.__baselen*math.cos(P)
+			y2 = self.__baselen*math.sin(P)
+
+			self.__canvas.create_line(x1, y1, x1+x2, y1+y2)
+		
 
 	def moveStick(self, index, delta):
 		pass
