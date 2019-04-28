@@ -31,11 +31,33 @@ class App(Frame):
 
 
 class GameCanvas(Canvas, GameField):
+	def mouseDown(self, event):
+		self.x1, self.y1 = event.x, event.y
+		self.index = self.find_closest(event.x, event.y)
+		self.x01, self.y01, self.x02, self.y02 = self.coords(self.index)
+
+	def mouseMove(self, event):
+		if self.index:
+			self.delete(self.index)
+
+		delta = (self.x01 + event.x - self.x1, self.y01 + event.y - self.y1,
+				self.x02 + event.x - self.x1, self.y02 + event.y - self.y1)
+
+		self.index = self.moveStick(self.index, delta)
+
+	def mouseUp(self, event):
+		self.index = None
+
 	def __init__(self, *ap, **an):
 		an['width'] = GAME_SIZE
 		an['height'] = GAME_SIZE
+
 		Canvas.__init__(self, *ap, **an)
 		GameField.__init__(self, size=GAME_SIZE, canvas=self)
+
+		self.bind("<Button-1>", self.mouseDown)
+		self.bind("<B1-Motion>", self.mouseMove)
+		self.bind("<ButtonRelease-1>", self.mouseUp)
 
 
 class StatFrame(Frame):

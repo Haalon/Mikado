@@ -35,17 +35,19 @@ class GameField:
 
 	def shuffleSticks(self, num):
 		for _ in range(num):
-			x1, y1 = rnd.randint(self.__baselen, self.__size - self.__baselen), rnd.randint(self.__baselen, self.__size - self.__baselen)
-			P = rnd.random()*math.pi
+			x1 = rnd.randint(self.__baselen, self.__size - self.__baselen)
+			y1 = rnd.randint(self.__baselen, self.__size - self.__baselen)
 
-			x2 = self.__baselen*math.cos(P)
-			y2 = self.__baselen*math.sin(P)
+			P = rnd.random() * math.pi * 2
 
-			self.__canvas.create_line(x1, y1, x1+x2, y1+y2)
-		
+			x2 = self.__baselen * math.cos(P)
+			y2 = self.__baselen * math.sin(P)
+
+			self.__canvas.create_line(x1, y1, x1 + x2, y1 + y2)
 
 	def moveStick(self, index, delta):
-		pass
+		index = self.__canvas.create_line(delta[0], delta[1], delta[2], delta[3])
+		return index
 
 	def hasCicrleCollision(self, circle):
 		for stick in self.sticks:
