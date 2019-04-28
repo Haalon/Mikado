@@ -4,6 +4,7 @@ from logic import GameField
 
 GAME_SIZE = 800
 
+
 class App(Frame):
 	def __init__(self):
 		super().__init__()
@@ -34,8 +35,8 @@ class GameCanvas(Canvas, GameField):
 		an['width'] = GAME_SIZE
 		an['height'] = GAME_SIZE
 		Canvas.__init__(self, *ap, **an)
-		GameField.__init__(self, size = GAME_SIZE)
-		
+		GameField.__init__(self, size=GAME_SIZE)
+
 
 class StatFrame(Frame):
 	def __init__(self, *ap, **an):
