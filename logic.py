@@ -43,10 +43,29 @@ class GameField:
 			x2 = self.__baselen * math.cos(P)
 			y2 = self.__baselen * math.sin(P)
 
-			self.__canvas.create_line(x1, y1, x1 + x2, y1 + y2)
+			ind = self.__canvas.create_line(x1, y1, x1 + x2, y1 + y2)
+
+			self.__canvas.create_oval(x1 - self.__baserad, y1 - self.__baserad, x1 + self.__baserad,
+									 y1 + self.__baserad, tag='t' + str(ind))
+			self.__canvas.create_oval(x1 + x2 - self.__baserad, y1 + y2 - self.__baserad,
+										x1 + x2 + self.__baserad, y1 + y2 + self.__baserad, tag='t' + str(ind))
+			self.__canvas.itemconfig(ind, tag='t' + str(ind))
 
 	def moveStick(self, index, delta):
+		if index:
+			tt = self.__canvas.find_withtag('t' + str(index))
+			self.__canvas.delete(tt[0])
+			self.__canvas.delete(tt[1])
+			self.__canvas.delete(tt[2])
+
 		index = self.__canvas.create_line(delta[0], delta[1], delta[2], delta[3])
+
+		self.__canvas.create_oval(delta[0] - self.__baserad, delta[1] - self.__baserad, delta[0] + self.__baserad,
+									 delta[1] + self.__baserad, tag='t' + str(index))
+		self.__canvas.create_oval(delta[2] - self.__baserad, delta[3] - self.__baserad, delta[2] + self.__baserad,
+									 delta[3] + self.__baserad, tag='t' + str(index))
+		self.__canvas.itemconfig(index, tag='t' + str(index))
+
 		return index
 
 	def hasCicrleCollision(self, circle):

@@ -34,11 +34,12 @@ class GameCanvas(Canvas, GameField):
 	def mouseDown(self, event):
 		self.x1, self.y1 = event.x, event.y
 		self.index = self.find_closest(event.x, event.y)
+		self.index = self.index[0]
+
+		self.index = self.find_withtag(self.gettags(self.index)[0][1:])[0]
 		self.x01, self.y01, self.x02, self.y02 = self.coords(self.index)
 
 	def mouseMove(self, event):
-		if self.index:
-			self.delete(self.index)
 
 		delta = (self.x01 + event.x - self.x1, self.y01 + event.y - self.y1,
 				self.x02 + event.x - self.x1, self.y02 + event.y - self.y1)
