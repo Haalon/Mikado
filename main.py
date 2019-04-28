@@ -31,34 +31,52 @@ class App(Frame):
 
 
 class GameCanvas(Canvas, GameField):
-	def mouseDown(self, event):
-		self.x1, self.y1 = event.x, event.y
-		self.index = self.find_closest(event.x, event.y)
-		self.index = self.index[0]
-
-		self.index = self.find_withtag(self.gettags(self.index)[0][1:])[0]
-		self.x01, self.y01, self.x02, self.y02 = self.coords(self.index)
-
-	def mouseMove(self, event):
-
-		delta = (self.x01 + event.x - self.x1, self.y01 + event.y - self.y1,
-				self.x02 + event.x - self.x1, self.y02 + event.y - self.y1)
-
-		self.index = self.moveStick(self.index, delta)
-
-	def mouseUp(self, event):
-		self.index = None
-
 	def __init__(self, *ap, **an):
 		an['width'] = GAME_SIZE
 		an['height'] = GAME_SIZE
 
 		Canvas.__init__(self, *ap, **an)
-		GameField.__init__(self, size=GAME_SIZE, canvas=self)
-
+		GameField.__init__(self, size=GAME_SIZE)
+		
 		self.bind("<Button-1>", self.mouseDown)
 		self.bind("<B1-Motion>", self.mouseMove)
 		self.bind("<ButtonRelease-1>", self.mouseUp)
+
+		self.reDraw()
+
+	def drawStick(self, stick, key):
+		x1, y1, r1 = stick[0]
+		x2, y2, r2 = stick[1]
+
+		self.create_line(x1, y1, x2, y2, tag=key)
+		self.create_oval(x1 - r1, y1 - r1, x1 + r1, y1 + r1, tag=key)
+		self.create_oval(x2 - r2, y2 - r2, x2 + r2, y2 + r2, tag=key)
+
+	def reDraw(self):
+		self.delete("all")
+		for key, stick in self.sticks.items():
+			self.drawStick(stick, key)
+
+	def mouseDown(self, event):
+		self.x0, self.y0 = event.x, event.y
+		index = self.find_closest(event.x, event.y)
+
+		if index is None:
+			self._tag = None
+		else:
+			self._tag = self.gettags(index)[0]
+		
+	def mouseMove(self, event):
+		if self._tag is None:
+			return
+
+		delta = (event.x - self.x0, event.y - self.y0)
+		self.x0, self.y0 = event.x, event.y
+		self.moveStick(self._tag, delta)
+		self.reDraw()
+
+	def mouseUp(self, event):
+		self._tag = None
 
 
 class StatFrame(Frame):
