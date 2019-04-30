@@ -44,18 +44,18 @@ class GameCanvas(Canvas, GameField):
 
 		self.reDraw()
 
-	def drawStick(self, stick, key):
+	def drawStick(self, stick, key, col = 'black'):
 		x1, y1, r1 = stick[0]
 		x2, y2, r2 = stick[1]
 
-		self.create_line(x1, y1, x2, y2, tag=key)
-		self.create_oval(x1 - r1, y1 - r1, x1 + r1, y1 + r1, tag=key)
-		self.create_oval(x2 - r2, y2 - r2, x2 + r2, y2 + r2, tag=key)
+		self.create_line(x1, y1, x2, y2, tag=key, fill=col)
+		self.create_oval(x1 - r1, y1 - r1, x1 + r1, y1 + r1, tag=key, fill=col)
+		self.create_oval(x2 - r2, y2 - r2, x2 + r2, y2 + r2, tag=key, fill=col)
 
 	def reDraw(self):
 		self.delete("all")
 		for key, stick in self.sticks.items():
-			self.drawStick(stick, key)
+			self.drawStick(stick, key, col = 'red' if key in self.collided else 'black')
 
 	def mouseDown(self, event):
 		self.x0, self.y0 = event.x, event.y

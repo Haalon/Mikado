@@ -30,6 +30,7 @@ def _stickCollision(st1, st2):
 class GameField:
 	def __init__(self, size, sticksnum=24, rad_percent=0.02, line_percent=0.2):
 
+
 		self.__size = size
 		self.__baserad = rad_percent * size
 		self.__baselen = line_percent * size
@@ -47,6 +48,8 @@ class GameField:
 			return [[x1,y1, self.__baserad], [x2,y2, self.__baserad]]		
 
 	def shuffleSticks(self, num):
+		self.gameover = False
+		self.collided = []
 		i = 0
 		while i < num:
 			newstick = self.createStick()
@@ -55,6 +58,9 @@ class GameField:
 				i+=1
 
 	def moveStick(self, key, delta):
+		if self.gameover:
+			return
+
 		st = self.sticks[key] #just an alias
 
 		st[0][0] += delta[0]
@@ -62,6 +68,13 @@ class GameField:
 
 		st[0][1] += delta[1]
 		st[1][1] += delta[1]
+
+		flag = self.hasStickCollision(key)
+
+		if flag:
+			self.gameover = True
+			self.collided = [flag, key]
+
 
 	def hasCicrleCollision(self, circle):
 		for stick in self.sticks.values():
@@ -71,13 +84,13 @@ class GameField:
 		return False
 
 	def hasStickCollision(self, item):
-		if isinstance(item, int): #we assume it's a key
-			for i, stick in self.sticks.items():
-				if i == item:
+		if isinstance(item, str): #we assume it's a key
+			for key, stick in self.sticks.items():
+				if key == item:
 					continue
 
 				if _stickCollision(stick, self.sticks[item]):
-					return True
+					return key
 		else: #we assume it's a stick
 			for stick in self.sticks.values():
 				if _stickCollision(stick, item):
