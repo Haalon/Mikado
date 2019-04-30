@@ -54,6 +54,9 @@ class GameCanvas(Canvas, GameField):
 
 	def reDraw(self):
 		self.delete("all")
+		if self.victory:
+			self['bg'] = 'pale green'
+
 		for key, stick in self.sticks.items():
 			if key in self.collided:
 				col = 'red'

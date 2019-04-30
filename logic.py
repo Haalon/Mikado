@@ -29,8 +29,6 @@ def _stickCollision(st1, st2):
 
 class GameField:
 	def __init__(self, size, sticksnum=24, rad_percent=0.015, line_percent=0.2, border_percent = 0.2):
-
-
 		self.__size = size
 		self.__baserad = rad_percent * size
 		self.__baselen = line_percent * size
@@ -52,6 +50,7 @@ class GameField:
 		self.gameover = False
 		self.collided = []
 		self.solved = []
+		self.victory = False
 
 		i = 0
 		while i < num:
@@ -86,6 +85,9 @@ class GameField:
 
 		if out_flag and not key in self.solved:
 			self.solved.append(key)
+			if len(self.sticks) == len(self.solved):
+				self.victory = True
+				self.gameover = True
 
 		if not out_flag and key in self.solved:
 			self.solved.remove(key)
