@@ -55,7 +55,14 @@ class GameCanvas(Canvas, GameField):
 	def reDraw(self):
 		self.delete("all")
 		for key, stick in self.sticks.items():
-			self.drawStick(stick, key, col = 'red' if key in self.collided else 'black')
+			if key in self.collided:
+				col = 'red'
+			elif key in self.solved:
+				col = 'sky blue'
+			else:
+				col = 'black'
+
+			self.drawStick(stick, key, col = col)
 
 	def mouseDown(self, event):
 		self.x0, self.y0 = event.x, event.y

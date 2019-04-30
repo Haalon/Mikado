@@ -28,18 +28,19 @@ def _stickCollision(st1, st2):
 
 
 class GameField:
-	def __init__(self, size, sticksnum=24, rad_percent=0.02, line_percent=0.2):
+	def __init__(self, size, sticksnum=24, rad_percent=0.015, line_percent=0.2, border_percent = 0.2):
 
 
 		self.__size = size
 		self.__baserad = rad_percent * size
 		self.__baselen = line_percent * size
+		self.border = border_percent * size
 		self.sticks = {}
 		self.shuffleSticks(sticksnum)
 
 	def createStick(self):
-			x1 = rnd.randint(self.__baselen, self.__size - self.__baselen)
-			y1 = rnd.randint(self.__baselen, self.__size - self.__baselen)
+			x1 = rnd.randint(self.border, self.__size - self.border)
+			y1 = rnd.randint(self.border, self.__size - self.border)
 
 			P = rnd.random() * math.pi * 2
 
@@ -50,12 +51,23 @@ class GameField:
 	def shuffleSticks(self, num):
 		self.gameover = False
 		self.collided = []
+		self.solved = []
+
 		i = 0
 		while i < num:
 			newstick = self.createStick()
 			if not self.hasStickCollision(newstick):
 				self.sticks['t'+ str(i)] = newstick
 				i+=1
+
+	def isOutOfBorders(self, key):
+		(x1, y1, _), (x2, y2, _) = self.sticks[key][0:2]
+		b0 = self.border
+		b1 = self.__size - self.border
+		caseX = (x1 < b0 and x2 < b0) or (b1 < x1 and b1 < x2)
+		caseY = (y1 < b0 and y2 < b0) or (b1 < y1 and b1 < y2)
+		return caseX or caseY 
+
 
 	def moveStick(self, key, delta):
 		if self.gameover:
@@ -69,11 +81,18 @@ class GameField:
 		st[0][1] += delta[1]
 		st[1][1] += delta[1]
 
-		flag = self.hasStickCollision(key)
+		coll_flag = self.hasStickCollision(key) # also key if collided
+		out_flag = self.isOutOfBorders(key)
 
-		if flag:
+		if out_flag and not key in self.solved:
+			self.solved.append(key)
+
+		if not out_flag and key in self.solved:
+			self.solved.remove(key)
+
+		if coll_flag:
 			self.gameover = True
-			self.collided = [flag, key]
+			self.collided = [coll_flag, key]
 
 
 	def hasCicrleCollision(self, circle):
