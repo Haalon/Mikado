@@ -94,14 +94,6 @@ class GameField:
 			self.gameover = True
 			self.collided = [coll_flag, key]
 
-
-	def hasCicrleCollision(self, circle):
-		for stick in self.sticks.values():
-			if _mixedCollision(circle, stick):
-				return True
-
-		return False
-
 	def hasStickCollision(self, item):
 		if isinstance(item, str): #we assume it's a key
 			for key, stick in self.sticks.items():
@@ -116,7 +108,3 @@ class GameField:
 					return True
 
 		return False
-
-
-def _randomDot(minx=0, miny=0, maxx=1, maxy=1):
-	return (rnd.uniform(minx, maxx), rnd.uniform(miny, maxy))
