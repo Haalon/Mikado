@@ -47,8 +47,12 @@ class GameField:
 			return [[x1,y1, self.__baserad], [x2,y2, self.__baserad]]		
 
 	def shuffleSticks(self, num):
-		for i in range(num):
-			self.sticks['t'+ str(i)] = self.createStick()
+		i = 0
+		while i < num:
+			newstick = self.createStick()
+			if not self.hasStickCollision(newstick):
+				self.sticks['t'+ str(i)] = newstick
+				i+=1
 
 	def moveStick(self, key, delta):
 		st = self.sticks[key] #just an alias
@@ -66,13 +70,18 @@ class GameField:
 
 		return False
 
-	def hasStickCollision(self, key):
-		for i, stick in self.sticks.items():
-			if i == key:
-				continue
+	def hasStickCollision(self, item):
+		if isinstance(item, int): #we assume it's a key
+			for i, stick in self.sticks.items():
+				if i == item:
+					continue
 
-			if _stickCollision(stick, self.sticks[key]):
-				return True
+				if _stickCollision(stick, self.sticks[item]):
+					return True
+		else: #we assume it's a stick
+			for stick in self.sticks.values():
+				if _stickCollision(stick, item):
+					return True
 
 		return False
 
