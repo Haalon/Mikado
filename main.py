@@ -44,8 +44,7 @@ class GameCanvas(Canvas, GameField):
 		self.textV = StringVar()
 		self.reDraw()
 
-
-	def drawStick(self, stick, key, col = 'black'):
+	def drawStick(self, stick, key, col='black'):
 		x1, y1, r1 = stick[0]
 		x2, y2, r2 = stick[1]
 
@@ -70,7 +69,7 @@ class GameCanvas(Canvas, GameField):
 			else:
 				col = 'black'
 
-			self.drawStick(stick, key, col = col)
+			self.drawStick(stick, key, col=col)
 
 	def mouseDown(self, event):
 		self.x0, self.y0 = event.x, event.y
@@ -80,7 +79,7 @@ class GameCanvas(Canvas, GameField):
 			self._tag = None
 		else:
 			self._tag = self.gettags(index)[0]
-		
+
 	def mouseMove(self, event):
 		if self._tag is None:
 			return
@@ -128,19 +127,18 @@ class ControlFrame(Frame):
 
 	def difficulty(self, event):
 		num = self.difText.get('1.0', 'end-1c')
-		if num and int(num)<100:
+		if num and int(num) < 100:
 			self.field.sticksnum = int(self.difText.get('1.0', 'end-1c'))
 			self.newGame()
 		self.difText.edit_modified(False)
 
-	
 	def create(self):
 		self.Quit = Button(self, text="Quit", highlightthickness=0, command=self.quit)
 		self.Quit.grid(row=2, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
 
 		self.NewGame = Button(self, text="New Game", highlightthickness=0, command=self.newGame)
 		self.NewGame.grid(row=0, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
-		
+
 		self.difLabel = Label(self, text="Difficulty: ", bg='gray70')
 		self.difLabel.grid(row=1, column=0, sticky="SWE", padx=5, pady=3)
 
