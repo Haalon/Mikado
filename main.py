@@ -33,7 +33,7 @@ class App(Frame):
 class GameCanvas(Canvas, GameField):
 	def __init__(self, master):
 		self.scoreVar = StringVar()
-		
+
 		Canvas.__init__(self, master, width=GAME_SIZE, height=GAME_SIZE)
 		GameField.__init__(self)
 
@@ -57,6 +57,7 @@ class GameCanvas(Canvas, GameField):
 
 	def reDraw(self):
 		self.delete("all")
+		self.create_rectangle(self.border, self.border, GAME_SIZE - self.border, GAME_SIZE -self.border, fill='misty rose', outline='misty rose')
 		if self.victory:
 			self['bg'] = 'pale green'
 		else:
