@@ -31,32 +31,36 @@ def _stickCollision(st1, st2):
 
 
 class GameField:
-	def __init__(self, size, sticksnum=24, rad_percent=0.015, line_percent=0.2, border_percent=0.2):
+	def __init__(self):
+		self.newGame()		
+
+	def newGame(self, size=512, sticksnum=24, rad_percent=0.015, line_percent=0.2, border_percent=0.2):
 		self.__size = size
 		self.__baserad = rad_percent * size
 		self.__baselen = line_percent * size
 		self.score = 0
 		self.border = border_percent * size
+
 		self.sticks = {}
-		self.sticksnum = sticksnum
-		self.shuffleSticks(self.sticksnum)
-
-	def createStick(self):
-			x1 = rnd.randint(self.border, self.__size - self.border)
-			y1 = rnd.randint(self.border, self.__size - self.border)
-
-			P = rnd.random() * math.pi * 2
-
-			x2 = self.__baselen * math.cos(P) + x1
-			y2 = self.__baselen * math.sin(P) + y1
-			return [[x1, y1, self.__baserad], [x2, y2, self.__baserad]]
-
-	def shuffleSticks(self, num):
 		self.gameover = False
 		self.collided = []
 		self.solved = []
 		self.victory = False
 
+		self.sticksnum = sticksnum
+		self.shuffleSticks(sticksnum)
+
+	def createStick(self):
+		x1 = rnd.uniform(self.border, self.__size - self.border)
+		y1 = rnd.uniform(self.border, self.__size - self.border)
+
+		P = rnd.random() * math.pi * 2
+
+		x2 = self.__baselen * math.cos(P) + x1
+		y2 = self.__baselen * math.sin(P) + y1
+		return [[x1, y1, self.__baserad], [x2, y2, self.__baserad]]
+
+	def shuffleSticks(self, num):
 		self.sticks = {}
 
 		i = 0

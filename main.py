@@ -2,7 +2,7 @@ from tkinter import *
 import utils
 from logic import GameField
 
-GAME_SIZE = 800
+GAME_SIZE = 512
 
 
 class App(Frame):
@@ -36,7 +36,7 @@ class GameCanvas(Canvas, GameField):
 		an['height'] = GAME_SIZE
 
 		Canvas.__init__(self, *ap, **an)
-		GameField.__init__(self, size=GAME_SIZE)
+		GameField.__init__(self)
 
 		self.bind("<Button-1>", self.mouseDown)
 		self.bind("<B1-Motion>", self.mouseMove)
@@ -119,16 +119,16 @@ class ControlFrame(Frame):
 		super().__init__(*ap, **an)
 		self['bg'] = 'gray70'
 		self.create()
+		self.settings = {}
 
 	def newGame(self):
-		self.field.shuffleSticks(self.field.sticksnum)
-		self.field.score = 0
+		self.field.newGame(**self.settings)
 		self.field.reDraw()
 
 	def difficulty(self, event):
 		num = self.difText.get('1.0', 'end-1c')
 		if num and int(num) < 100:
-			self.field.sticksnum = int(self.difText.get('1.0', 'end-1c'))
+			self.settings['sticksnum'] = int(self.difText.get('1.0', 'end-1c'))
 			self.newGame()
 		self.difText.edit_modified(False)
 
