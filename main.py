@@ -22,7 +22,7 @@ class App(Frame):
 		self.field = GameCanvas(self)
 		self.field.grid(row=0, column=0, rowspan=2, sticky="NESW", pady=3)
 
-		self.stats = StatFrame(self, self.field.score, self.field.textV)
+		self.stats = StatFrame(self, self.field.scoreVar)
 		self.stats.grid(row=0, column=1, sticky="NESW", pady=3)
 
 		self.controls = ControlFrame(self, self.field)
@@ -32,14 +32,20 @@ class App(Frame):
 
 class GameCanvas(Canvas, GameField):
 	def __init__(self, master):
+		self.scoreVar = StringVar()
+		
 		Canvas.__init__(self, master, width=GAME_SIZE, height=GAME_SIZE)
 		GameField.__init__(self)
 
 		self.bind("<Button-1>", self.mouseDown)
 		self.bind("<B1-Motion>", self.mouseMove)
 		self.bind("<ButtonRelease-1>", self.mouseUp)
-		self.textV = StringVar()
+		
 		self.reDraw()
+
+	def newGame(self, **an):
+		super().newGame(**an)
+		self.scoreVar.set('Score: ' + str(self.score))
 
 	def drawStick(self, stick, key, col='black'):
 		x1, y1, r1 = stick[0]
@@ -55,8 +61,6 @@ class GameCanvas(Canvas, GameField):
 			self['bg'] = 'pale green'
 		else:
 			self['bg'] = 'gray90'
-
-		self.textV.set('Score: ' + str(self.score))
 
 		for key, stick in self.sticks.items():
 			if key in self.collided:
@@ -84,6 +88,7 @@ class GameCanvas(Canvas, GameField):
 		delta = (event.x - self.x0, event.y - self.y0)
 		self.x0, self.y0 = event.x, event.y
 		self.moveStick(self._tag, delta)
+		self.scoreVar.set('Score: ' + str(self.score))
 		self.reDraw()
 
 	def mouseUp(self, event):
@@ -91,10 +96,9 @@ class GameCanvas(Canvas, GameField):
 
 
 class StatFrame(Frame):
-	def __init__(self, master, score, textV):
+	def __init__(self, master, scoreVar):
 		super().__init__(master)
-		self.score = score
-		self.textV = textV
+		self.scoreVar = scoreVar
 		self['bg'] = 'gray70'
 		self.create()
 
@@ -102,8 +106,7 @@ class StatFrame(Frame):
 		self.statLabel = Label(self, text='Stats', bg='gray70')
 		self.statLabel.grid(row=0, sticky=N)
 
-		self.scoreLabel = Label(self, textvariable=self.textV, bg='gray70')
-		self.textV.set('Score: ' + str(self.score))
+		self.scoreLabel = Label(self, textvariable=self.scoreVar, bg='gray70')
 		self.scoreLabel.grid(row=1, sticky=N)
 
 		utils.grid_weight_configure(self, row_val=0)
