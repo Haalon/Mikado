@@ -74,9 +74,11 @@ class GameField:
 		(x1, y1, _), (x2, y2, _) = self.sticks[key][0:2]
 		b0 = self.border
 		b1 = self.__size - self.border
-		caseX = (x1 < b0 and x2 < b0) or (b1 < x1 and b1 < x2)
-		caseY = (y1 < b0 and y2 < b0) or (b1 < y1 and b1 < y2)
-		return caseX or caseY
+
+		def inside(x, y):
+			return b0 < x < b1 and b0 < y < b1
+
+		return not (inside(x1, y1) or inside(x2, y2))
 
 	def moveStick(self, key, delta):
 		if self.gameover:

@@ -80,7 +80,9 @@ class GameCanvas(Canvas, GameField):
 		if index is None:
 			self._tag = None
 		else:
-			self._tag = self.gettags(index)[0]
+			tags = self.gettags(index)
+			self._tag = tags[0] if len(tags) > 1 else None
+			
 
 	def mouseMove(self, event):
 		if self._tag is None:
