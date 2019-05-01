@@ -22,7 +22,7 @@ class App(Frame):
 		self.field = GameCanvas(self, bg='gray90')
 		self.field.grid(row=0, column=0, rowspan=2, sticky="NESW", pady=3)
 
-		self.stats = StatFrame(self)
+		self.stats = StatFrame(self.field.score, self.field.textV, self)
 		self.stats.grid(row=0, column=1, sticky="NESW", pady=3)
 
 		self.controls = ControlFrame(self.field, self.stats, self)
@@ -41,6 +41,7 @@ class GameCanvas(Canvas, GameField):
 		self.bind("<Button-1>", self.mouseDown)
 		self.bind("<B1-Motion>", self.mouseMove)
 		self.bind("<ButtonRelease-1>", self.mouseUp)
+		self.textV = StringVar()
 		self.reDraw()
 
 
@@ -59,6 +60,7 @@ class GameCanvas(Canvas, GameField):
 		else:
 			self['bg'] = 'gray90'
 
+		self.textV.set('Score: ' + str(self.score))
 
 		for key, stick in self.sticks.items():
 			if key in self.collided:
@@ -93,14 +95,21 @@ class GameCanvas(Canvas, GameField):
 
 
 class StatFrame(Frame):
-	def __init__(self, *ap, **an):
+	def __init__(self, score, textV, *ap, **an):
 		super().__init__(*ap, **an)
+		self.score = score
+		self.textV = textV
 		self['bg'] = 'gray70'
 		self.create()
 
 	def create(self):
 		self.statLabel = Label(self, text='Stats', bg='gray70')
-		self.statLabel.grid(sticky=N)
+		self.statLabel.grid(row=0, sticky=N)
+
+		self.scoreLabel = Label(self, textvariable=self.textV, bg='gray70')
+		self.textV.set('Score: ' + str(self.score))
+		self.scoreLabel.grid(row=1, sticky=N)
+
 		utils.grid_weight_configure(self)
 
 
@@ -114,6 +123,7 @@ class ControlFrame(Frame):
 
 	def newGame(self):
 		self.field.shuffleSticks(24)
+		self.field.score = 0
 		self.field.reDraw()
 
 	def create(self):
