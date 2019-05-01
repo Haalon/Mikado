@@ -28,14 +28,15 @@ def _stickCollision(st1, st2):
 
 
 class GameField:
-	def __init__(self, size, sticksnum=2, rad_percent=0.015, line_percent=0.2, border_percent = 0.2):
+	def __init__(self, size, sticksnum=24, rad_percent=0.015, line_percent=0.2, border_percent = 0.2):
 		self.__size = size
 		self.__baserad = rad_percent * size
 		self.__baselen = line_percent * size
 		self.score = 0
 		self.border = border_percent * size
 		self.sticks = {}
-		self.shuffleSticks(sticksnum)
+		self.sticksnum = sticksnum
+		self.shuffleSticks(self.sticksnum)
 
 	def createStick(self):
 			x1 = rnd.randint(self.border, self.__size - self.border)
@@ -52,6 +53,8 @@ class GameField:
 		self.collided = []
 		self.solved = []
 		self.victory = False
+
+		self.sticks={}
 
 		i = 0
 		while i < num:

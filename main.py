@@ -110,7 +110,7 @@ class StatFrame(Frame):
 		self.textV.set('Score: ' + str(self.score))
 		self.scoreLabel.grid(row=1, sticky=N)
 
-		utils.grid_weight_configure(self)
+		utils.grid_weight_configure(self, row_val=0)
 
 
 class ControlFrame(Frame):
@@ -122,17 +122,33 @@ class ControlFrame(Frame):
 		self.create()
 
 	def newGame(self):
-		self.field.shuffleSticks(24)
+		self.field.shuffleSticks(self.field.sticksnum)
 		self.field.score = 0
 		self.field.reDraw()
 
+	def difficulty(self, event):
+		num = self.difText.get('1.0', 'end-1c')
+		if num and int(num)<100:
+			self.field.sticksnum = int(self.difText.get('1.0', 'end-1c'))
+			self.newGame()
+		self.difText.edit_modified(False)
+
+	
 	def create(self):
 		self.Quit = Button(self, text="Quit", highlightthickness=0, command=self.quit)
-		self.Quit.grid(row=1, column=0, sticky="SWE", padx=5, pady=3)
+		self.Quit.grid(row=2, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
 
 		self.NewGame = Button(self, text="New Game", highlightthickness=0, command=self.newGame)
-		self.NewGame.grid(row=0, column=0, sticky="SWE", padx=5, pady=3)
-		utils.grid_weight_configure(self, row_val=[1, 0], col_val=1)
+		self.NewGame.grid(row=0, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
+		
+		self.difLabel = Label(self, text="Difficulty: ", bg='gray70')
+		self.difLabel.grid(row=1, column=0, sticky="SWE", padx=5, pady=3)
+
+		self.difText = Text(self, height=1, width=3)
+		self.difText.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
+		self.difText.bind('<<Modified>>', self.difficulty)
+
+		utils.grid_weight_configure(self, row_val=[0, 0, 0], col_val=1)
 
 
 App()
