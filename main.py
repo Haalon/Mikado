@@ -19,23 +19,20 @@ class App(Frame):
 		self.mainloop()
 
 	def create(self):
-		self.field = GameCanvas(self, bg='gray90')
+		self.field = GameCanvas(self)
 		self.field.grid(row=0, column=0, rowspan=2, sticky="NESW", pady=3)
 
-		self.stats = StatFrame(self.field.score, self.field.textV, self)
+		self.stats = StatFrame(self, self.field.score, self.field.textV)
 		self.stats.grid(row=0, column=1, sticky="NESW", pady=3)
 
-		self.controls = ControlFrame(self.field, self.stats, self)
+		self.controls = ControlFrame(self, self.field)
 		self.controls.grid(row=1, column=1, sticky="NESW", pady=3)
 		utils.grid_weight_configure(self, col_val=[1, 0])
 
 
 class GameCanvas(Canvas, GameField):
-	def __init__(self, *ap, **an):
-		an['width'] = GAME_SIZE
-		an['height'] = GAME_SIZE
-
-		Canvas.__init__(self, *ap, **an)
+	def __init__(self, master):
+		Canvas.__init__(self, master, width=GAME_SIZE, height=GAME_SIZE)
 		GameField.__init__(self)
 
 		self.bind("<Button-1>", self.mouseDown)
@@ -94,8 +91,8 @@ class GameCanvas(Canvas, GameField):
 
 
 class StatFrame(Frame):
-	def __init__(self, score, textV, *ap, **an):
-		super().__init__(*ap, **an)
+	def __init__(self, master, score, textV):
+		super().__init__(master)
 		self.score = score
 		self.textV = textV
 		self['bg'] = 'gray70'
@@ -113,10 +110,9 @@ class StatFrame(Frame):
 
 
 class ControlFrame(Frame):
-	def __init__(self, field, stats, *ap, **an):
+	def __init__(self, master, field):
 		self.field = field
-		self.stats = stats
-		super().__init__(*ap, **an)
+		super().__init__(master)
 		self['bg'] = 'gray70'
 		self.create()
 		self.settings = {}
