@@ -25,7 +25,7 @@ class App(Frame):
 		self.stats = StatFrame(self)
 		self.stats.grid(row=0, column=1, sticky="NESW", pady=3)
 
-		self.controls = ControlFrame(self)
+		self.controls = ControlFrame(self.field, self.stats, self)
 		self.controls.grid(row=1, column=1, sticky="NESW", pady=3)
 		utils.grid_weight_configure(self, col_val=[1, 0])
 
@@ -37,12 +37,12 @@ class GameCanvas(Canvas, GameField):
 
 		Canvas.__init__(self, *ap, **an)
 		GameField.__init__(self, size=GAME_SIZE)
-		
+
 		self.bind("<Button-1>", self.mouseDown)
 		self.bind("<B1-Motion>", self.mouseMove)
 		self.bind("<ButtonRelease-1>", self.mouseUp)
-
 		self.reDraw()
+
 
 	def drawStick(self, stick, key, col = 'black'):
 		x1, y1, r1 = stick[0]
@@ -56,6 +56,9 @@ class GameCanvas(Canvas, GameField):
 		self.delete("all")
 		if self.victory:
 			self['bg'] = 'pale green'
+		else:
+			self['bg'] = 'gray90'
+
 
 		for key, stick in self.sticks.items():
 			if key in self.collided:
@@ -102,13 +105,16 @@ class StatFrame(Frame):
 
 
 class ControlFrame(Frame):
-	def __init__(self, *ap, **an):
+	def __init__(self, field, stats, *ap, **an):
+		self.field = field
+		self.stats = stats
 		super().__init__(*ap, **an)
 		self['bg'] = 'gray70'
 		self.create()
 
 	def newGame(self):
-		pass
+		self.field.shuffleSticks(24)
+		self.field.reDraw()
 
 	def create(self):
 		self.Quit = Button(self, text="Quit", highlightthickness=0, command=self.quit)
