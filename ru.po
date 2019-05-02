@@ -1,0 +1,42 @@
+# Russian translations for Mikado package.
+# Copyright (C) 2019 ORGANIZATION
+# oxo <tutushkinart@yandex.ru>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mikado 2D\n"
+"POT-Creation-Date: 2019-05-02 19:53+MSK\n"
+"PO-Revision-Date: 2019-05-02 18:22+0300\n"
+"Last-Translator: oxo <tutushkinart@yandex.ru>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: main.py:30
+msgid "Mikado2D"
+msgstr "Бирюльки"
+
+#: main.py:31 main.py:63
+msgid "Score: "
+msgstr "Счет: "
+
+#: main.py:32
+msgid "Quit"
+msgstr "Выход"
+
+#: main.py:33
+msgid "New Game"
+msgstr "Новая игра"
+
+#: main.py:34
+msgid "Difficulty: "
+msgstr "Сложность: "
+
+#: main.py:124
+msgid "Stats"
+msgstr "Статистика"

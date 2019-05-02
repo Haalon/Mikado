@@ -1,22 +1,37 @@
 from tkinter import *
 import utils
 from logic import GameField
+import gettext
+import sys
+import os.path
 
 GAME_SIZE = 512
 
+datapath = os.path.dirname(sys.argv[0])
+gettext.install('app', datapath)
 
 class App(Frame):
 	def __init__(self):
 		super().__init__()
 		self.master.rowconfigure(0, weight=1)
 		self.master.columnconfigure(0, weight=1)
-		self.master.title("Mikado2D")
+
+
 		self.master['padx'] = 10
 		self.master['pady'] = 10
 		self.grid(sticky="NESW")
 
 		self.create()
+
+		self.update_labels()
 		self.mainloop()
+
+	def update_labels(self):
+	    self.master.title(_("Mikado2D"))
+	    self.field.scoreVar.set(_('Score: ') + str(self.field.score))
+	    self.controls.Quit['text'] = _("Quit")
+	    self.controls.NewGame['text'] = _("New Game")
+	    self.controls.difLabel['text'] = _("Difficulty: ")
 
 	def create(self):
 		self.field = GameCanvas(self)
@@ -45,7 +60,7 @@ class GameCanvas(Canvas, GameField):
 
 	def newGame(self, **an):
 		super().newGame(**an)
-		self.scoreVar.set('Score: ' + str(self.score))
+		self.scoreVar.set(_('Score: ') + str(self.score))
 
 	def drawStick(self, stick, key, col='black'):
 		x1, y1, r1 = stick[0]
@@ -106,7 +121,7 @@ class StatFrame(Frame):
 		self.create()
 
 	def create(self):
-		self.statLabel = Label(self, text='Stats', bg='gray70')
+		self.statLabel = Label(self, text=_('Stats'), bg='gray70')
 		self.statLabel.grid(row=0, sticky=N)
 
 		self.scoreLabel = Label(self, textvariable=self.scoreVar, bg='gray70')
@@ -135,13 +150,13 @@ class ControlFrame(Frame):
 		self.difText.edit_modified(False)
 
 	def create(self):
-		self.Quit = Button(self, text="Quit", highlightthickness=0, command=self.quit)
+		self.Quit = Button(self, highlightthickness=0, command=self.quit)
 		self.Quit.grid(row=2, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
 
-		self.NewGame = Button(self, text="New Game", highlightthickness=0, command=self.newGame)
+		self.NewGame = Button(self, highlightthickness=0, command=self.newGame)
 		self.NewGame.grid(row=0, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
 
-		self.difLabel = Label(self, text="Difficulty: ", bg='gray70')
+		self.difLabel = Label(self, bg='gray70')
 		self.difLabel.grid(row=1, column=0, sticky="SWE", padx=5, pady=3)
 
 		self.difText = Text(self, height=1, width=3)
