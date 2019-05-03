@@ -37,6 +37,8 @@ class App(Frame):
 
 	def create(self):
 		self.top = Toplevel()
+		self.top.title("Menu")
+
 		self.field = GameCanvas(self)
 		self.field.grid(row=0, column=0, sticky="NESW", pady=3)
 
