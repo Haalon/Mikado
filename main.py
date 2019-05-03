@@ -36,15 +36,16 @@ class App(Frame):
 	    self.controls.radLabel['text'] = _("Radius: ")
 
 	def create(self):
+		self.top = Toplevel()
 		self.field = GameCanvas(self)
-		self.field.grid(row=0, column=0, rowspan=2, sticky="NESW", pady=3)
+		self.field.grid(row=0, column=0, sticky="NESW", pady=3)
 
-		self.stats = StatFrame(self, self.field.scoreVar)
-		self.stats.grid(row=0, column=1, sticky="NESW", pady=3)
+		self.stats = StatFrame(self.top, self.field.scoreVar)
+		self.stats.grid(row=0, column=0, sticky="NEW", pady=3)
 
-		self.controls = ControlFrame(self, self.field)
-		self.controls.grid(row=1, column=1, sticky="NESW", pady=3)
-		utils.grid_weight_configure(self, col_val=[1, 0])
+		self.controls = ControlFrame(self.top, self.field)
+		self.controls.grid(row=1, column=0, sticky="NEW", pady=3)
+		utils.grid_weight_configure(self, col_val=[1, 0], row_val=[0,1])
 
 
 class GameCanvas(Canvas, GameField):
@@ -129,9 +130,6 @@ class StatFrame(Frame):
 		self.create()
 
 	def create(self):
-		self.statLabel = Label(self, text=_('Stats'), bg='gray70')
-		self.statLabel.grid(row=0, sticky=N)
-
 		self.scoreLabel = Label(self, textvariable=self.scoreVar, bg='gray70')
 		self.scoreLabel.grid(row=1, sticky=N)
 
