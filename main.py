@@ -6,6 +6,7 @@ import sys
 import os.path
 
 GAME_SIZE = 512
+RAD_SCALE = 0.015
 
 datapath = os.path.dirname(sys.argv[0])
 gettext.install('app', datapath)
@@ -32,6 +33,7 @@ class App(Frame):
 	    self.controls.Quit['text'] = _("Quit")
 	    self.controls.NewGame['text'] = _("New Game")
 	    self.controls.difLabel['text'] = _("Sticks number: ")
+	    self.controls.radLabel['text'] = _("Radius: ")
 
 	def create(self):
 		self.field = GameCanvas(self)
@@ -138,6 +140,7 @@ class ControlFrame(Frame):
 		super().__init__(master)
 		self['bg'] = 'gray70'
 		self.create()
+		self.prevRad = int(self.radScale.get())
 		self.settings = {}
 
 	def newGame(self):
@@ -145,15 +148,20 @@ class ControlFrame(Frame):
 		self.field.reDraw()
 
 	def difficulty(self, event):
-		num = self.difScale.get()
-		if num and int(num) < 100:
-			self.settings['sticksnum'] = int(self.difScale.get())
+		self.settings['sticksnum'] = int(self.difScale.get())
+		self.newGame()
+
+	def radius(self, event):
+		if int(self.radScale.get()) != self.prevRad:
+			self.settings['rad_percent'] = int(self.radScale.get())/1000 + RAD_SCALE
 			self.newGame()
-		# self.difText.edit_modified(False)
+		
+		self.prevRad = int(self.radScale.get())
+
 
 	def create(self):
 		self.Quit = Button(self, highlightthickness=0, command=self.quit)
-		self.Quit.grid(row=2, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
+		self.Quit.grid(row=3, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
 
 		self.NewGame = Button(self, highlightthickness=0, command=self.newGame)
 		self.NewGame.grid(row=0, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
@@ -161,15 +169,18 @@ class ControlFrame(Frame):
 		self.difLabel = Label(self, bg='gray70')
 		self.difLabel.grid(row=1, column=0, sticky="SWEN", padx=5, pady=3)
 
-		self.difScale = Scale(self, from_=10, to=100, orient=HORIZONTAL)
+		self.difScale = Scale(self, from_=10, to=50, orient=HORIZONTAL)
 		self.difScale.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
 		self.difScale.bind("<ButtonRelease-1>", self.difficulty)
 
-		# self.difText = Text(self, height=1, width=3)
-		# self.difText.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
-		# self.difText.bind('<<Modified>>', self.difficulty)
+		self.radLabel = Label(self, bg='gray70')
+		self.radLabel.grid(row=2, column=0, sticky="SWEN", padx=5, pady=3)
+		
+		self.radScale = Scale(self, from_=1, to=10, orient=HORIZONTAL, showvalue=False)
+		self.radScale.grid(row=2, column=1, sticky='swe', padx=5, pady=3)
+		self.radScale.bind("<B1-Motion>", self.radius)
 
-		utils.grid_weight_configure(self, row_val=[0, 0, 0], col_val=1)
+		utils.grid_weight_configure(self, row_val=[0, 0, 0, 0], col_val=1)
 
 
 App()
