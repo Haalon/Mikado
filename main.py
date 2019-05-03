@@ -102,6 +102,7 @@ class GameCanvas(Canvas, GameField):
 		else:
 			tags = self.gettags(index)
 			self._tag = tags[0] if len(tags) > 1 else None
+			self.reDraw()
 
 	def mouseMove(self, event):
 		if self._tag is None:
