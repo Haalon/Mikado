@@ -31,7 +31,7 @@ class App(Frame):
 	    self.field.scoreVar.set(_('Score: ') + str(self.field.score))
 	    self.controls.Quit['text'] = _("Quit")
 	    self.controls.NewGame['text'] = _("New Game")
-	    self.controls.difLabel['text'] = _("Difficulty: ")
+	    self.controls.difLabel['text'] = _("Sticks number: ")
 
 	def create(self):
 		self.field = GameCanvas(self)
@@ -145,11 +145,11 @@ class ControlFrame(Frame):
 		self.field.reDraw()
 
 	def difficulty(self, event):
-		num = self.difText.get('1.0', 'end-1c')
+		num = self.difScale.get()
 		if num and int(num) < 100:
-			self.settings['sticksnum'] = int(self.difText.get('1.0', 'end-1c'))
+			self.settings['sticksnum'] = int(self.difScale.get())
 			self.newGame()
-		self.difText.edit_modified(False)
+		# self.difText.edit_modified(False)
 
 	def create(self):
 		self.Quit = Button(self, highlightthickness=0, command=self.quit)
@@ -159,11 +159,15 @@ class ControlFrame(Frame):
 		self.NewGame.grid(row=0, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
 
 		self.difLabel = Label(self, bg='gray70')
-		self.difLabel.grid(row=1, column=0, sticky="SWE", padx=5, pady=3)
+		self.difLabel.grid(row=1, column=0, sticky="SWEN", padx=5, pady=3)
 
-		self.difText = Text(self, height=1, width=3)
-		self.difText.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
-		self.difText.bind('<<Modified>>', self.difficulty)
+		self.difScale = Scale(self, from_=10, to=100, orient=HORIZONTAL)
+		self.difScale.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
+		self.difScale.bind("<ButtonRelease-1>", self.difficulty)
+
+		# self.difText = Text(self, height=1, width=3)
+		# self.difText.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
+		# self.difText.bind('<<Modified>>', self.difficulty)
 
 		utils.grid_weight_configure(self, row_val=[0, 0, 0], col_val=1)
 
