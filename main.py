@@ -11,12 +11,12 @@ RAD_SCALE = 0.015
 datapath = os.path.dirname(sys.argv[0])
 gettext.install('app', datapath)
 
+
 class App(Frame):
 	def __init__(self):
 		super().__init__()
 		self.master.rowconfigure(0, weight=1)
 		self.master.columnconfigure(0, weight=1)
-
 
 		self.master['padx'] = 10
 		self.master['pady'] = 10
@@ -57,7 +57,7 @@ class GameCanvas(Canvas, GameField):
 		self.bind("<Button-1>", self.mouseDown)
 		self.bind("<B1-Motion>", self.mouseMove)
 		self.bind("<ButtonRelease-1>", self.mouseUp)
-		
+
 		self.reDraw()
 
 	def newGame(self, **an):
@@ -74,7 +74,8 @@ class GameCanvas(Canvas, GameField):
 
 	def reDraw(self):
 		self.delete("all")
-		self.create_rectangle(self.border, self.border, GAME_SIZE - self.border, GAME_SIZE -self.border, fill='misty rose', outline='misty rose')
+		self.create_rectangle(self.border, self.border, GAME_SIZE - self.border,
+			GAME_SIZE - self.border, fill='misty rose', outline='misty rose')
 		if self.victory:
 			self['bg'] = 'pale green'
 		else:
@@ -97,7 +98,6 @@ class GameCanvas(Canvas, GameField):
 		else:
 			tags = self.gettags(index)
 			self._tag = tags[0] if len(tags) > 1 else None
-			
 
 	def mouseMove(self, event):
 		if self._tag is None:
@@ -153,11 +153,10 @@ class ControlFrame(Frame):
 
 	def radius(self, event):
 		if int(self.radScale.get()) != self.prevRad:
-			self.settings['rad_percent'] = int(self.radScale.get())/1000 + RAD_SCALE
+			self.settings['rad_percent'] = int(self.radScale.get()) / 1000 + RAD_SCALE
 			self.newGame()
-		
-		self.prevRad = int(self.radScale.get())
 
+		self.prevRad = int(self.radScale.get())
 
 	def create(self):
 		self.Quit = Button(self, highlightthickness=0, command=self.quit)
@@ -175,7 +174,7 @@ class ControlFrame(Frame):
 
 		self.radLabel = Label(self, bg='gray70')
 		self.radLabel.grid(row=2, column=0, sticky="SWEN", padx=5, pady=3)
-		
+
 		self.radScale = Scale(self, from_=1, to=10, orient=HORIZONTAL, showvalue=False)
 		self.radScale.grid(row=2, column=1, sticky='swe', padx=5, pady=3)
 		self.radScale.bind("<B1-Motion>", self.radius)
