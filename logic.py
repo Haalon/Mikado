@@ -44,7 +44,6 @@ class GameField:
 		self.sticks = {}
 		self.gameover = False
 		self.collided = []
-		self.solved = []
 		self.victory = False
 
 		self.sticksnum = sticksnum
@@ -95,17 +94,13 @@ class GameField:
 		coll_flag = self.hasStickCollision(key)  # also key if collided
 		out_flag = self.isOutOfBorders(key)
 
-		if out_flag and not key in self.solved:
-			self.solved.append(key)
+		if out_flag:
+			self.sticks.pop(key)
 			self.score += 100
-			if len(self.sticks) == len(self.solved):
+			if len(self.sticks) == 0:
 				self.victory = True
 				self.score += 1000
 				self.gameover = True
-
-		if not out_flag and key in self.solved:
-			self.solved.remove(key)
-			self.score -= 100
 
 		if coll_flag:
 			self.gameover = True

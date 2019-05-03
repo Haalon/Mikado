@@ -81,8 +81,6 @@ class GameCanvas(Canvas, GameField):
 		for key, stick in self.sticks.items():
 			if key in self.collided:
 				col = 'red'
-			elif key in self.solved:
-				col = 'sky blue'
 			else:
 				col = 'black'
 
@@ -101,6 +99,10 @@ class GameCanvas(Canvas, GameField):
 
 	def mouseMove(self, event):
 		if self._tag is None:
+			return
+
+		if not self._tag in self.sticks:
+			self._tag = None
 			return
 
 		delta = (event.x - self.x0, event.y - self.y0)
