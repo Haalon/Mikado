@@ -57,6 +57,7 @@ class GameCanvas(Canvas, GameField):
 		self.bind("<Button-1>", self.mouseDown)
 		self.bind("<B1-Motion>", self.mouseMove)
 		self.bind("<ButtonRelease-1>", self.mouseUp)
+		self._tag = None
 
 		self.reDraw()
 
@@ -84,6 +85,8 @@ class GameCanvas(Canvas, GameField):
 		for key, stick in self.sticks.items():
 			if key in self.collided:
 				col = 'red'
+			elif self._tag == key:
+				col = 'sky blue'
 			else:
 				col = 'black'
 
@@ -115,6 +118,7 @@ class GameCanvas(Canvas, GameField):
 
 	def mouseUp(self, event):
 		self._tag = None
+		self.reDraw()
 
 
 class StatFrame(Frame):
