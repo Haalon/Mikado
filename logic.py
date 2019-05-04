@@ -69,7 +69,7 @@ class GameField:
 	def shuffleSticks(self, types):
 		self.sticks = {}
 		total = 0
-
+		types = sorted(types, key=lambda t: t[1], reverse=True)
 		for num, rad in types:
 			i = 0
 			tries = 0
