@@ -32,8 +32,6 @@ class App(Frame):
 	    self.field.scoreVar.set(_('Score: ') + str(self.field.score))
 	    self.controls.Quit['text'] = _("Quit")
 	    self.controls.NewGame['text'] = _("New Game")
-	    self.controls.numLabel['text'] = _("Sticks number: ")
-	    self.controls.radLabel['text'] = _("Radius: ")
 
 	def create(self):
 		self.top = Toplevel()
@@ -138,6 +136,90 @@ class StatFrame(Frame):
 
 		utils.grid_weight_configure(self, row_val=0)
 
+class StickSettings(Frame):	
+	event = '<<Changed>>'
+	del_event = '<<Deleted>>'
+
+	def __init__(self, master, id):
+		self.id = id
+		self.root = master
+		super().__init__(master)
+		self['bd'] = 2
+		self['relief'] ='ridge'
+		self.create()
+
+	def get(self):
+		return (self.num, self.rad)
+
+	def setNum(self, event):
+		self.num = self.numScale.get()
+		self.root.event_generate(self.event)
+		
+	def setRad(self, event):
+		self.rad = self.radScale.get()
+		self.root.event_generate(self.event)
+
+	def delete(self):
+		self.root.event_generate(self.del_event, state=self.id)
+
+	def create(self):
+		self.delBtn = Button(self, text='X', command=self.delete)
+		self.delBtn.grid(row=0, column=0, sticky='w', padx=5, pady=3)
+
+		self.numScale = Scale(self, from_=10, to=100, orient=HORIZONTAL)
+		self.numScale.grid(row=0, column=1, sticky='swe', padx=5, pady=3)
+		self.numScale.bind("<ButtonRelease-1>", self.setNum)
+
+		self.radScale = Scale(self, from_=1, to=4, orient=HORIZONTAL, resolution=0.25)
+		self.radScale.grid(row=0, column=2, sticky='swe', padx=5, pady=3)
+		self.radScale.bind("<B1-Motion>", self.setRad)
+
+class StickList(Frame):
+	def __init__(self, master):
+		super().__init__(master)
+		self['bd'] = 2
+		self['relief'] = 'ridge'
+
+		self.stickList = []
+		self.create()
+
+		self.bind(StickSettings.del_event, self.elemDelete)
+		self.add()		
+
+	def elemDelete(self, event):
+		elem = self.stickList.pop(event.state)
+		elem.destroy()
+		self.replace()
+
+	def replace(self):
+		for elem in self.stickList:
+			elem.grid_forget()
+
+		for i, elem in enumerate(self.stickList):
+			elem.grid(row=i+1, column=0, columnspan=2, sticky='we', pady=3)
+			elem.id = i # compensate the shift from deleted items
+
+	def add(self):
+		newid = len(self.stickList)
+		elem = StickSettings(self, newid)
+		self.stickList.append(elem)
+		self.replace()
+
+	def clear(self):
+		while self.stickList:
+			elem = self.stickList.pop()
+			elem.destroy()
+
+	def create(self):
+		self.addBtn = Button(self, text='Add', command=self.add)
+		self.addBtn.grid(row=0, column=0, sticky='w', padx=5, pady=3)
+
+		self.clrBtn = Button(self, text='Clear', command=self.clear)
+		self.clrBtn.grid(row=0, column=1, sticky='e', padx=5, pady=3)
+
+		# self.stickFrame = Frame(self)
+		# self.stickFrame.grid(row=1, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
+
 
 class ControlFrame(Frame):
 	def __init__(self, master, field):
@@ -145,40 +227,21 @@ class ControlFrame(Frame):
 		super().__init__(master)
 		self['bg'] = 'gray70'
 		self.create()
-		self.prevRad = int(self.radScale.get())
 		self.settings = {}
 
 	def newGame(self):
 		self.field.newGame(**self.settings)
 		self.field.reDraw()
 
-	def setNum(self, event):
-		self.settings['sticksnum'] = self.numScale.get()
-		
-	def setRad(self, event):
-		self.settings['rad'] = self.radScale.get()
-			
-
 	def create(self):
 		self.Quit = Button(self, highlightthickness=0, command=self.quit)
-		self.Quit.grid(row=3, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
+		self.Quit.grid(row=0, column=0, sticky="SWE", padx=5, pady=3)
 
 		self.NewGame = Button(self, highlightthickness=0, command=self.newGame)
-		self.NewGame.grid(row=0, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
+		self.NewGame.grid(row=0, column=1, sticky="SWE", padx=5, pady=3)
 
-		self.numLabel = Label(self, bg='gray70')
-		self.numLabel.grid(row=1, column=0, sticky="SWEN", padx=5, pady=3)
-
-		self.numScale = Scale(self, from_=10, to=100, orient=HORIZONTAL)
-		self.numScale.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
-		self.numScale.bind("<ButtonRelease-1>", self.setNum)
-
-		self.radLabel = Label(self, bg='gray70')
-		self.radLabel.grid(row=2, column=0, sticky="SWEN", padx=5, pady=3)
-
-		self.radScale = Scale(self, from_=1, to=4, orient=HORIZONTAL, showvalue=False, resolution=0.25)
-		self.radScale.grid(row=2, column=1, sticky='swe', padx=5, pady=3)
-		self.radScale.bind("<B1-Motion>", self.setRad)
+		self.test = StickList(self)
+		self.test.grid(row=1, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
 
 		utils.grid_weight_configure(self, row_val=[0, 0, 0, 0], col_val=1)
 
