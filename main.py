@@ -32,7 +32,7 @@ class App(Frame):
 	    self.field.scoreVar.set(_('Score: ') + str(self.field.score))
 	    self.controls.Quit['text'] = _("Quit")
 	    self.controls.NewGame['text'] = _("New Game")
-	    self.controls.difLabel['text'] = _("Sticks number: ")
+	    self.controls.numLabel['text'] = _("Sticks number: ")
 	    self.controls.radLabel['text'] = _("Radius: ")
 
 	def create(self):
@@ -152,16 +152,12 @@ class ControlFrame(Frame):
 		self.field.newGame(**self.settings)
 		self.field.reDraw()
 
-	def difficulty(self, event):
-		self.settings['sticksnum'] = int(self.difScale.get())
-		self.newGame()
-
-	def radius(self, event):
-		if int(self.radScale.get()) != self.prevRad:
-			self.settings['rad_percent'] = int(self.radScale.get()) / 1000 + RAD_SCALE
-			self.newGame()
-
-		self.prevRad = int(self.radScale.get())
+	def setNum(self, event):
+		self.settings['sticksnum'] = self.numScale.get()
+		
+	def setRad(self, event):
+		self.settings['rad'] = self.radScale.get()
+			
 
 	def create(self):
 		self.Quit = Button(self, highlightthickness=0, command=self.quit)
@@ -170,19 +166,19 @@ class ControlFrame(Frame):
 		self.NewGame = Button(self, highlightthickness=0, command=self.newGame)
 		self.NewGame.grid(row=0, column=0, columnspan=2, sticky="SWE", padx=5, pady=3)
 
-		self.difLabel = Label(self, bg='gray70')
-		self.difLabel.grid(row=1, column=0, sticky="SWEN", padx=5, pady=3)
+		self.numLabel = Label(self, bg='gray70')
+		self.numLabel.grid(row=1, column=0, sticky="SWEN", padx=5, pady=3)
 
-		self.difScale = Scale(self, from_=10, to=50, orient=HORIZONTAL)
-		self.difScale.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
-		self.difScale.bind("<ButtonRelease-1>", self.difficulty)
+		self.numScale = Scale(self, from_=10, to=100, orient=HORIZONTAL)
+		self.numScale.grid(row=1, column=1, sticky='swe', padx=5, pady=3)
+		self.numScale.bind("<ButtonRelease-1>", self.setNum)
 
 		self.radLabel = Label(self, bg='gray70')
 		self.radLabel.grid(row=2, column=0, sticky="SWEN", padx=5, pady=3)
 
-		self.radScale = Scale(self, from_=1, to=10, orient=HORIZONTAL, showvalue=False)
+		self.radScale = Scale(self, from_=1, to=4, orient=HORIZONTAL, showvalue=False, resolution=0.25)
 		self.radScale.grid(row=2, column=1, sticky='swe', padx=5, pady=3)
-		self.radScale.bind("<B1-Motion>", self.radius)
+		self.radScale.bind("<B1-Motion>", self.setRad)
 
 		utils.grid_weight_configure(self, row_val=[0, 0, 0, 0], col_val=1)
 

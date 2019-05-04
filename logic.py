@@ -6,7 +6,9 @@ stick:
 	[[x1, y1, r1],
 	 [x2, y2, r2]]
 """
-
+RAD_PERCENT = 0.01
+LINE_PERCENT = 0.2
+BORDER_PERCENT = 0.2
 
 def _dist2(x1, y1, x2, y2):
 	return (x1 - x2)**2 + (y1 - y2)**2
@@ -34,12 +36,12 @@ class GameField:
 	def __init__(self):
 		self.newGame()		
 
-	def newGame(self, size=512, sticksnum=24, rad_percent=0.015, line_percent=0.2, border_percent=0.2):
+	def newGame(self, size=512, sticksnum=24, rad=3):
 		self.__size = size
-		self.__baserad = rad_percent * size
-		self.__baselen = line_percent * size
+		self.__baserad = RAD_PERCENT * size * rad
+		self.__baselen = LINE_PERCENT * size
 		self.score = 0
-		self.border = border_percent * size
+		self.border = BORDER_PERCENT * size
 
 		self.sticks = {}
 		self.gameover = False
