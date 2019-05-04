@@ -21,11 +21,13 @@ class StickSettings(Frame):
 		self.delBtn = Button(self, text='X', command=self.delete)
 		self.delBtn.grid(row=0, column=0, sticky='w', padx=5, pady=3)
 
-		self.numScale = Scale(self, from_=10, to=100, orient=HORIZONTAL, label="Amount")
+		self.numScale = Scale(self, from_=10, to=100, orient=HORIZONTAL, label="Amount", length=300)
 		self.numScale.grid(row=0, column=1, sticky='swe', padx=5, pady=3)
+		self.numScale.set(24)
 
 		self.radScale = Scale(self, from_=1, to=4, orient=HORIZONTAL, resolution=0.25, label="Radius")
 		self.radScale.grid(row=0, column=2, sticky='swe', padx=5, pady=3)
+		self.radScale.set(2)
 
 
 class StickList(Frame):

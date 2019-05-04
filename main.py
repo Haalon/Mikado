@@ -1,10 +1,11 @@
 from tkinter import *
 import utils
-from logic import GameField
+from logic import *
 from stickList import StickList
 import gettext
 import sys
 import os.path
+from tkinter import messagebox
 
 GAME_SIZE = 512
 RAD_SCALE = 0.015
@@ -24,7 +25,7 @@ class App(Frame):
 		self.grid(sticky="NESW")
 
 		self.create()
-
+		self.controls.newGame()
 		self.update_labels()
 		self.mainloop()
 
@@ -37,11 +38,12 @@ class App(Frame):
 	def create(self):
 		self.top = Toplevel()
 		self.top.title("Menu")
+		self.top.protocol("WM_DELETE_WINDOW", self.quit)
 
 		self.field = GameCanvas(self)
-		self.field.grid(row=0, column=0, sticky="NESW", pady=3)
+		self.field.grid(row=1, column=0, sticky="NESW", pady=3)
 
-		self.stats = StatFrame(self.top, self.field.scoreVar)
+		self.stats = StatFrame(self, self.field.scoreVar)
 		self.stats.grid(row=0, column=0, sticky="NEW", pady=3)
 
 		self.controls = ControlFrame(self.top, self.field)
@@ -61,11 +63,14 @@ class GameCanvas(Canvas, GameField):
 		self.bind("<ButtonRelease-1>", self.mouseUp)
 		self._tag = None
 
-		self.reDraw()
-
 	def newGame(self, **an):
-		super().newGame(**an)
-		self.scoreVar.set(_('Score: ') + str(self.score))
+		try:
+			super().newGame(**an)
+			self.scoreVar.set(_('Score: ') + str(self.score))
+			self.reDraw()
+		except MyIterError:
+			messagebox.showinfo("Error", "Could not create a valid game field.\n Try again, or reduce number of sticks or radius values")
+
 
 	def drawStick(self, stick, key, col='black'):
 		x1, y1, r1 = stick[0]
@@ -148,7 +153,6 @@ class ControlFrame(Frame):
 
 	def newGame(self):
 		self.field.newGame(types=self.stickTypes.get())
-		self.field.reDraw()
 
 	def create(self):
 		self.Quit = Button(self, highlightthickness=0, command=self.quit)

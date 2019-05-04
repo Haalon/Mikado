@@ -10,6 +10,8 @@ RAD_PERCENT = 0.01
 LINE_PERCENT = 0.2
 BORDER_PERCENT = 0.2
 
+MAX_ITER = 256
+
 def _dist2(x1, y1, x2, y2):
 	return (x1 - x2)**2 + (y1 - y2)**2
 
@@ -34,7 +36,11 @@ def _stickCollision(st1, st2):
 
 class GameField:
 	def __init__(self):
-		self.newGame()		
+		self.score = 0
+		self.sticks = {}
+		self.gameover = False
+		self.collided = []
+		self.victory = False
 
 	def newGame(self, size=512, types = [(24,3)]):
 		self.__size = size
@@ -63,14 +69,21 @@ class GameField:
 	def shuffleSticks(self, types):
 		self.sticks = {}
 		total = 0
+
 		for num, rad in types:
 			i = 0
+			tries = 0
 			while i < num:
 				newstick = self.createStick(rad)
+				tries += 1
 				if not self.hasStickCollision(newstick):
 					self.sticks['t' + str(total)] = newstick
 					i += 1
 					total += 1
+					tries = 0
+
+				if tries > MAX_ITER:
+					raise MyIterError()
 
 	def isOutOfBorders(self, key):
 		(x1, y1, _), (x2, y2, _) = self.sticks[key][0:2]
@@ -122,3 +135,7 @@ class GameField:
 					return True
 
 		return False
+
+class MyIterError(Exception):
+	pass
+		
