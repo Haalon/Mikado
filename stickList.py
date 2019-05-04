@@ -21,7 +21,7 @@ class StickSettings(Frame):
 		self.delBtn = Button(self, text='X', command=self.delete)
 		self.delBtn.grid(row=0, column=0, sticky='w', padx=5, pady=3)
 
-		self.numScale = Scale(self, from_=10, to=100, orient=HORIZONTAL, label="Amount", length=300)
+		self.numScale = Scale(self, from_=1, to=300, orient=HORIZONTAL, label="Number", length=200)
 		self.numScale.grid(row=0, column=1, sticky='swe', padx=5, pady=3)
 		self.numScale.set(24)
 
