@@ -36,9 +36,9 @@ class GameField:
 	def __init__(self):
 		self.newGame()		
 
-	def newGame(self, size=512, sticksnum=24, rad=3):
+	def newGame(self, size=512, types = [(24,3)]):
 		self.__size = size
-		self.__baserad = RAD_PERCENT * size * rad
+		self.__baserad = RAD_PERCENT * size
 		self.__baselen = LINE_PERCENT * size
 		self.score = 0
 		self.border = BORDER_PERCENT * size
@@ -48,10 +48,9 @@ class GameField:
 		self.collided = []
 		self.victory = False
 
-		self.sticksnum = sticksnum
-		self.shuffleSticks(sticksnum)
+		self.shuffleSticks(types)
 
-	def createStick(self):
+	def createStick(self, rad):
 		x1 = rnd.uniform(self.border, self.__size - self.border)
 		y1 = rnd.uniform(self.border, self.__size - self.border)
 
@@ -59,17 +58,19 @@ class GameField:
 
 		x2 = self.__baselen * math.cos(P) + x1
 		y2 = self.__baselen * math.sin(P) + y1
-		return [[x1, y1, self.__baserad], [x2, y2, self.__baserad]]
+		return [[x1, y1, self.__baserad * rad], [x2, y2, self.__baserad * rad], rad*4-3]
 
-	def shuffleSticks(self, num):
+	def shuffleSticks(self, types):
 		self.sticks = {}
-
-		i = 0
-		while i < num:
-			newstick = self.createStick()
-			if not self.hasStickCollision(newstick):
-				self.sticks['t' + str(i)] = newstick
-				i += 1
+		total = 0
+		for num, rad in types:
+			i = 0
+			while i < num:
+				newstick = self.createStick(rad)
+				if not self.hasStickCollision(newstick):
+					self.sticks['t' + str(total)] = newstick
+					i += 1
+					total += 1
 
 	def isOutOfBorders(self, key):
 		(x1, y1, _), (x2, y2, _) = self.sticks[key][0:2]
@@ -98,10 +99,9 @@ class GameField:
 
 		if out_flag:
 			self.sticks.pop(key)
-			self.score += 100
+			self.score += st[2]
 			if len(self.sticks) == 0:
 				self.victory = True
-				self.score += 1000
 				self.gameover = True
 
 		if coll_flag:
