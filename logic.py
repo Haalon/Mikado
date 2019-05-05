@@ -4,7 +4,8 @@ import math
 """
 stick:
 	[[x1, y1, r1],
-	 [x2, y2, r2]]
+	 [x2, y2, r2],
+	 value]
 """
 RAD_PERCENT = 0.01
 LINE_PERCENT = 0.2
@@ -56,6 +57,9 @@ class GameField:
 
 		self.shuffleSticks(types)
 
+	def radToScore(self, rad):
+		return int(rad*4-3)
+
 	def createStick(self, rad):
 		x1 = rnd.uniform(self.border, self.__size - self.border)
 		y1 = rnd.uniform(self.border, self.__size - self.border)
@@ -64,7 +68,8 @@ class GameField:
 
 		x2 = self.__baselen * math.cos(P) + x1
 		y2 = self.__baselen * math.sin(P) + y1
-		return [[x1, y1, self.__baserad * rad], [x2, y2, self.__baserad * rad], rad*4-3]
+		val = self.radToScore(rad)
+		return [[x1, y1, self.__baserad * rad], [x2, y2, self.__baserad * rad], val]
 
 	def shuffleSticks(self, types):
 		self.sticks = {}
