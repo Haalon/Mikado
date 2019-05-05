@@ -21,11 +21,12 @@ class StickSettings(Frame):
 		self.delBtn = Button(self, text='X', command=self.delete)
 		self.delBtn.grid(row=0, column=0, sticky='w', padx=5, pady=3)
 
-		self.numScale = Scale(self, from_=1, to=300, orient=HORIZONTAL, label="Number", length=200)
+		self.numScale = Scale(self, from_=1, to=300, orient=HORIZONTAL, label=_("Number"), length=200)
 		self.numScale.grid(row=0, column=1, sticky='swe', padx=5, pady=3)
 		self.numScale.set(24)
 
-		self.radScale = Scale(self, from_=1, to=4, orient=HORIZONTAL, resolution=0.25, label="Radius", digits=3)
+		self.radScale = Scale(self, from_=1, to=4, orient=HORIZONTAL, resolution=0.25, label=_("Radius"), digits=3)
+
 		self.radScale.grid(row=0, column=2, sticky='swe', padx=5, pady=3)
 		self.radScale.set(2)
 
@@ -76,10 +77,10 @@ class StickList(Frame):
 			elem.destroy()
 
 	def create(self):
-		self.addBtn = Button(self, text='Add', command=self.add)
+		self.addBtn = Button(self, text=_('Add'), command=self.add)
 		self.addBtn.grid(row=0, column=0, sticky='w', padx=5, pady=3)
 
-		self.clrBtn = Button(self, text='Clear', command=self.clear)
+		self.clrBtn = Button(self, text=_('Clear'), command=self.clear)
 		self.clrBtn.grid(row=0, column=1, sticky='e', padx=5, pady=3)
 
 		# self.stickFrame = Frame(self)

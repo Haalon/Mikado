@@ -40,7 +40,7 @@ class App(Frame):
 
 	def create(self):
 		self.top = Toplevel()
-		self.top.title("Menu")
+		self.top.title(_("Menu"))
 		self.top.protocol("WM_DELETE_WINDOW", self.quit)
 
 		self.field = GameCanvas(self)
@@ -72,7 +72,7 @@ class GameCanvas(Canvas, GameField):
 			self.scoreVar.set(_('Score: ') + str(self.score))
 			self.reDraw()
 		except MyIterError:
-			messagebox.showinfo("Error", "Could not create a valid game field.\n Try again, or reduce number of sticks or radius values")
+			messagebox.showinfo(_("Error"), _("Could not create a valid game field.\n Try again, or reduce number of sticks or radius values"))
 
 
 	def drawStick(self, stick, key, col='black'):
@@ -129,7 +129,7 @@ class GameCanvas(Canvas, GameField):
 		delta = (event.x - self.x0, event.y - self.y0)
 		self.x0, self.y0 = event.x, event.y
 		self.moveStick(self._tag, delta)
-		self.scoreVar.set('Score: ' + str(self.score))
+		self.scoreVar.set(_('Score: ') + str(self.score))
 		self.reDraw()
 
 	def mouseUp(self, event):
