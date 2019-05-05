@@ -8,6 +8,6 @@ To compile the translation:
 Mikado is a pick-up sticks game originating in Europe, played with a set of same-length sticks
 
 ## GUI sketch
-![](https://pp.userapi.com/c854120/v854120686/3658a/hMemR0E0t-k.jpg)
-![](https://pp.userapi.com/c854120/v854120686/36583/ReuTAoklEEk.jpg)
+![](https://pp.userapi.com/c850124/v850124884/12f2b3/-A0ONN3joYk.jpg)
+![](https://pp.userapi.com/c850124/v850124884/12f2ba/gQsyarXMuTo.jpg)
 
