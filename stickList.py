@@ -25,7 +25,8 @@ class StickSettings(Frame):
 		self.numScale.grid(row=0, column=1, sticky='swe', padx=5, pady=3)
 		self.numScale.set(24)
 
-		self.radScale = Scale(self, from_=1, to=4, orient=HORIZONTAL, resolution=0.25, label=_("Radius"))
+		self.radScale = Scale(self, from_=1, to=4, orient=HORIZONTAL, resolution=0.25, label=_("Radius"), digits=3)
+
 		self.radScale.grid(row=0, column=2, sticky='swe', padx=5, pady=3)
 		self.radScale.set(2)
 

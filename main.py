@@ -9,6 +9,9 @@ from tkinter import messagebox
 
 GAME_SIZE = 512
 RAD_SCALE = 0.015
+BASE_COL = (255, 0, 0) #light green, color of stick with value = 1
+BASE_DELTA = 27 #hue shift for a stick with next value
+BASE_SCALE = 0.75
 
 datapath = os.path.dirname(sys.argv[0])
 gettext.install('app', datapath)
@@ -90,12 +93,17 @@ class GameCanvas(Canvas, GameField):
 			self['bg'] = 'gray90'
 
 		for key, stick in self.sticks.items():
+			val = stick[2]
+			stick_col_rgb = utils.shift_hue(BASE_COL, BASE_DELTA * (val-1))
+
+			stick_col_hex = utils.rgb_to_hex(stick_col_rgb)
 			if key in self.collided:
-				col = 'red'
-			elif self._tag == key:
-				col = 'sky blue'
-			else:
 				col = 'black'
+			elif self._tag == key:
+				stick_col_rgb = utils.scale_brightness(stick_col_rgb, BASE_SCALE)
+				col = utils.rgb_to_hex(stick_col_rgb)
+			else:
+				col = stick_col_hex
 
 			self.drawStick(stick, key, col=col)
 

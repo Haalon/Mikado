@@ -1,6 +1,6 @@
 """Small helper functions, mostly for tkinter"""
 import tkinter as tk
-
+import colorsys
 
 def set_col(widg, col):
 	"""
@@ -21,6 +21,34 @@ def set_col(widg, col):
 	for child in widg.winfo_children():
 		set_col(child, col)
 
+
+def rgb_to_hex(rgb):
+	"""
+		translates an rgb tuple of int to a tkinter friendly color code
+	"""
+	return f'#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}'
+
+def shift_hue(rgb, delta):
+	"""
+		shift hue by delta degrees, for a given rgb int tuple 
+	"""
+	angle = delta/360
+	rgbf = tuple(val/255 for val in rgb)
+	h, s, v = colorsys.rgb_to_hsv(*rgbf)
+	h+=angle
+	if h > 1:
+		h -= 1
+	elif h < 0:
+		h += 1
+
+	rgbnew = colorsys.hsv_to_rgb(h, s, v)
+	return tuple(round(val * 255) for val in rgbnew)
+
+def scale_brightness(rgb, scale):
+	"""
+		scale brightness for a given rgb int tuple 
+	"""
+	return tuple(round(val * scale) for val in rgb)
 
 def grid_weight_configure(widg, row_val=1, col_val=1):
 	"""
