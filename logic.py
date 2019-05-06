@@ -4,14 +4,15 @@ import math
 """
 stick:
 	[[x1, y1, r1],
-	 [x2, y2, r2],
-	 value]
+	[x2, y2, r2],
+	value]
 """
 RAD_PERCENT = 0.01
 LINE_PERCENT = 0.2
 BORDER_PERCENT = 0.2
 
 MAX_ITER = 256
+
 
 def _dist2(x1, y1, x2, y2):
 	return (x1 - x2)**2 + (y1 - y2)**2
@@ -43,7 +44,7 @@ class GameField:
 		self.collided = []
 		self.victory = False
 
-	def newGame(self, size=512, types = [(24,3)]):
+	def newGame(self, size=512, types=[(24, 3)]):
 		self.__size = size
 		self.__baserad = RAD_PERCENT * size
 		self.__baselen = LINE_PERCENT * size
@@ -58,7 +59,7 @@ class GameField:
 		self.shuffleSticks(types)
 
 	def radToScore(self, rad):
-		return int(rad*4-3)
+		return int(rad * 4 - 3)
 
 	def createStick(self, rad):
 		x1 = rnd.uniform(self.border, self.__size - self.border)
@@ -141,6 +142,6 @@ class GameField:
 
 		return False
 
+
 class MyIterError(Exception):
 	pass
-		

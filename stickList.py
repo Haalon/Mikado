@@ -1,6 +1,7 @@
 from tkinter import *
 
-class StickSettings(Frame):	
+
+class StickSettings(Frame):
 	del_event = '<<Deleted>>'
 
 	def __init__(self, master, id):
@@ -8,7 +9,7 @@ class StickSettings(Frame):
 		self.root = master
 		super().__init__(master)
 		self['bd'] = 2
-		self['relief'] ='ridge'
+		self['relief'] = 'ridge'
 		self.create()
 
 	def get(self):
@@ -41,7 +42,7 @@ class StickList(Frame):
 		self.create()
 
 		self.bind(StickSettings.del_event, self.elemDelete)
-		self.add()		
+		self.add()
 
 	def elemDelete(self, event):
 		elem = self.stickList.pop(event.state)
@@ -56,14 +57,13 @@ class StickList(Frame):
 
 		return sticks_types
 
-
 	def replace(self):
 		for elem in self.stickList:
 			elem.grid_forget()
 
 		for i, elem in enumerate(self.stickList):
-			elem.grid(row=i+1, column=0, columnspan=2, sticky='we', pady=3)
-			elem.id = i # compensate the shift from deleted items
+			elem.grid(row=i + 1, column=0, columnspan=2, sticky='we', pady=3)
+			elem.id = i  # compensate the shift from deleted items
 
 	def add(self):
 		newid = len(self.stickList)

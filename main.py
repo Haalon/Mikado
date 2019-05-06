@@ -9,8 +9,8 @@ from tkinter import messagebox
 
 GAME_SIZE = 512
 RAD_SCALE = 0.015
-BASE_COL = (255, 0, 0) #light green, color of stick with value = 1
-BASE_DELTA = 27 #hue shift for a stick with next value
+BASE_COL = (255, 0, 0)  # light green, color of stick with value = 1
+BASE_DELTA = 27  # hue shift for a stick with next value
 BASE_SCALE = 0.75
 
 datapath = os.path.dirname(sys.argv[0])
@@ -33,10 +33,10 @@ class App(Frame):
 		self.mainloop()
 
 	def update_labels(self):
-	    self.master.title(_("Mikado2D"))
-	    self.field.scoreVar.set(_('Score: ') + str(self.field.score))
-	    self.controls.Quit['text'] = _("Quit")
-	    self.controls.NewGame['text'] = _("New Game")
+		self.master.title(_("Mikado2D"))
+		self.field.scoreVar.set(_('Score: ') + str(self.field.score))
+		self.controls.Quit['text'] = _("Quit")
+		self.controls.NewGame['text'] = _("New Game")
 
 	def create(self):
 		self.top = Toplevel()
@@ -51,7 +51,7 @@ class App(Frame):
 
 		self.controls = ControlFrame(self.top, self.field)
 		self.controls.grid(row=1, column=0, sticky="NEW", pady=3)
-		utils.grid_weight_configure(self, col_val=[1, 0], row_val=[0,1])
+		utils.grid_weight_configure(self, col_val=[1, 0], row_val=[0, 1])
 
 
 class GameCanvas(Canvas, GameField):
@@ -72,8 +72,10 @@ class GameCanvas(Canvas, GameField):
 			self.scoreVar.set(_('Score: ') + str(self.score))
 			self.reDraw()
 		except MyIterError:
-			messagebox.showinfo(_("Error"), _("Could not create a valid game field.\n Try again, or reduce number of sticks or radius values"))
-
+			messagebox.showinfo(
+				_("Error"),
+				_("Could not create a valid game field.\n Try again, or reduce number of sticks or radius values")
+			)
 
 	def drawStick(self, stick, key, col='black'):
 		x1, y1, r1 = stick[0]
@@ -85,8 +87,10 @@ class GameCanvas(Canvas, GameField):
 
 	def reDraw(self):
 		self.delete("all")
-		self.create_rectangle(self.border, self.border, GAME_SIZE - self.border,
-			GAME_SIZE - self.border, fill='misty rose', outline='misty rose')
+		self.create_rectangle(
+			self.border, self.border, GAME_SIZE - self.border,
+			GAME_SIZE - self.border, fill='misty rose', outline='misty rose'
+		)
 		if self.victory:
 			self['bg'] = 'pale green'
 		else:
@@ -94,7 +98,7 @@ class GameCanvas(Canvas, GameField):
 
 		for key, stick in self.sticks.items():
 			val = stick[2]
-			stick_col_rgb = utils.shift_hue(BASE_COL, BASE_DELTA * (val-1))
+			stick_col_rgb = utils.shift_hue(BASE_COL, BASE_DELTA * (val - 1))
 
 			stick_col_hex = utils.rgb_to_hex(stick_col_rgb)
 			if key in self.collided:
